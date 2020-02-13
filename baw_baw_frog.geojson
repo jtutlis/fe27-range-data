@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "data_0",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "ASSESSMENT": 6695616.0, "ID_NO": 16997.0, "BINOMIAL": "Philoria frosti", "PRESENCE": 1, "ORIGIN": 1, "SEASONAL": 1, "COMPILER": "IUCN", "YEAR": 2008, "CITATION": "IUCN (International Union for Conservation of Nature), Conservation International & NatureServe.", "LEGEND": "Extant (resident)", "SUBSPECIES": null, "SUBPOP": null, "DIST_COMM": null, "ISLAND": null, "TAX_COMM": null }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 146.20384669200007, -37.766924591999953 ], [ 146.222210755000106, -37.750029653999945 ], [ 146.233229192000067, -37.759578966999982 ], [ 146.247185880000075, -37.776473904999932 ], [ 146.29566700700002, -37.788961467999968 ], [ 146.33459882000011, -37.833035218999953 ], [ 146.355166571000041, -37.863886844999968 ], [ 146.358839383000031, -37.885189157999946 ], [ 146.333864258000062, -37.902818657999944 ], [ 146.277302944000098, -37.869763344999967 ], [ 146.232494630000019, -37.838177156999961 ], [ 146.20384669200007, -37.766924591999953 ] ] ] } }
+]
+}

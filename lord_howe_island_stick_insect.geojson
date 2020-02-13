@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "data_0",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "ASSESSMENT": 21426226.0, "ID_NO": 6852.0, "BINOMIAL": "Dryococelus australis", "PRESENCE": 1, "ORIGIN": 1, "SEASONAL": 1, "COMPILER": "Elena Rudolf", "YEAR": 2015, "CITATION": "Brock & Hasenpusch 2009", "LEGEND": "Extant (resident)", "SUBSPECIES": null, "SUBPOP": null, "DIST_COMM": null, "ISLAND": "Ball's Pyramid", "TAX_COMM": null }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 159.250806, -31.757944 ], [ 159.251667000000111, -31.758722 ], [ 159.252444, -31.758722 ], [ 159.25375, -31.760056 ], [ 159.25375, -31.760861 ], [ 159.254583, -31.761639 ], [ 159.254583, -31.765028 ], [ 159.253361, -31.766306 ], [ 159.251611, -31.766306 ], [ 159.248361, -31.762917 ], [ 159.2475, -31.762917 ], [ 159.246639, -31.762139 ], [ 159.245000000000118, -31.762139 ], [ 159.242861, -31.76 ], [ 159.242861, -31.759222 ], [ 159.243278, -31.75875 ], [ 159.244167, -31.75875 ], [ 159.244971999000086, -31.757944 ], [ 159.250806, -31.757944 ] ] ] } }
+]
+}

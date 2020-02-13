@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "data_0",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "ASSESSMENT": 3328048.0, "ID_NO": 12154.0, "BINOMIAL": "Litoria spenceri", "PRESENCE": 1, "ORIGIN": 1, "SEASONAL": 1, "COMPILER": "IUCN", "YEAR": 2008, "CITATION": "IUCN (International Union for Conservation of Nature), Conservation International & NatureServe.", "LEGEND": "Extant (resident)", "SUBSPECIES": null, "SUBPOP": null, "DIST_COMM": null, "ISLAND": null, "TAX_COMM": null }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 148.270658, -36.186331 ], [ 148.399998, -36.190349 ], [ 148.468936, -36.285154 ], [ 148.365569, -36.74498 ], [ 148.201965, -36.861968 ], [ 147.629143000000113, -37.103018 ], [ 146.686988, -37.587002 ], [ 146.445019000000116, -37.698504 ], [ 146.207426, -37.728577 ], [ 146.022008, -37.648742 ], [ 145.887932, -37.47451 ], [ 145.87903, -37.381848 ], [ 145.965521, -37.236107 ], [ 146.590051, -36.807731 ], [ 146.760007, -36.744762 ], [ 147.39859, -36.571506 ], [ 147.829677, -36.384868 ], [ 148.270658, -36.186331 ] ] ] } }
+]
+}
