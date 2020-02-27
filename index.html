@@ -1,40 +1,103 @@
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+<!DOCTYPE html>
+<html>
 
+<head>
+  <title>Data Vis A4 Tutlis</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+</head>
 
-<svg width=960 height=600>
-</svg>
+<body>
+  <div id="vis" class="d-flex justify-content-center text-center"></div>
+  <div id="text" class="d-flex justify-content-center text-center"></div>
+  <div id="bar" class="d-flex justify-content-center text-center"></div>
+  <!-- <div id="form" class="d-flex justify-content-center text-center"></div> -->
+</body>
+
+</html>
+
 
 <div id="info">
 </div>
 
 <script>
+ 
+  var vis = document.getElementById('vis');
+  var text = document.getElementById('text');
+  var bar = document.getElementById('bar');
+
+
+  var height = 400, width = 400;
+  var margin = {
+    left: 50, right: 50,
+    top: 50, bottom: 50
+  }
+
+  var svg = d3.select(vis)
+    .append('svg')
+    .attr('width', width + margin.right + margin.left)
+    .attr('height', height + margin.top + margin.bottom)
+    .style('border', '1px solid black')
+
+  // var bar = d3.select(vis)
+  //   .append('svg')
+  //   .attr('width', width + margin.right + margin.left)
+  //   .attr('height', height + margin.top + margin.bottom)
+  //   .style('border', '1px solid black')
+  //   .attr("transform",
+  //     "translate(" + 5 + ")");
+
 
   // adapted for d3.v5 from d3js in action
 
-  Promise.all([
-    d3.json('/data/all.geojson')
-  ]).then(([countries]) => {
-    createMap(countries)
-  })
+  // var selectList = document.createElement("select");
+  // selectList.id = "selectList"
+  // var body = document.getElementsByTagName("body")[0];
+  // body.appendChild(selectList);
+  console.log("TEST")
+  d3.json("https://jtutlis.github.io/04-Remix/data/all.geojson")
+    .then(function (countries) {
+      createMap(countries)
+    });
+
+  // const data = await d3.json("https://jtutlis.github.io/04-Remix/data/all.geojson");
+  // console.log(data);
+
 
   function createMap(countries) {
 
-    var proj = d3.geoMercator()
-      .center([132, -28])
-      .translate([960 / 2, 600 / 2])
-      .scale(1000);
-    //    .translate(250, 250) <- THIS WAS THE CULPRIT. CORRECT LINE BELOW
-    //    .translate([250, 250])
-    //    .scale(120);
+    var select = d3.select('body')
+      .append('select')
+      .attr('class', 'select')
+      .on('change', onchange)
 
-    //  var proj = d3.geoSatellite()
-    //    .scale(1330)
-    //    .translate([250,250])
-    //    .rotate([-30.24, -31, -56])
-    //    .tilt(15)
-    //    .distance(1.150)
-    //    .clipAngle(45);
+    data = countries.features;
+    // console.log(data))
+    var cache = {}; // keeps track of the animals we have already added
+    // adds all the speicies to select menu
+    for (var animal of countries.features) {
+      if (animal.properties.BINOMIAL != null && !(animal.properties.BINOMIAL in cache)) {
+        cache[animal.properties.BINOMIAL] = true
+        // var option = document.createElement("option");
+        // option.value = animal.properties.BINOMIAL
+        // option.text = animal.properties.BINOMIAL
+        // select.appendChild(option);
+      }
+
+    }
+
+    var options = select
+      .selectAll('option')
+      .data(Object.keys(cache).sort(d3.ascending)).enter()
+      .append('option')
+      .text(function (d) { return d; });
+
+    var proj = d3.geoMercator()
+      .center([140, -33])
+      .translate([height / 2, width / 2])
+      .scale(1000);
 
     var gpath = d3.geoPath()
       .projection(proj);
@@ -42,52 +105,50 @@
     var ccolor =
       d3.scaleSequential(d3.interpolateBlues)
         .domain(
-          d3.extent(countries.features, d => gpath.area(d))
+          d3.extent(data, d => gpath.area(d))
         );
 
-    console.log(d3.extent(countries.features, d => gpath.area(d)));
+    console.log(d3.extent(data, d => gpath.area(d)));
 
-    console.log(gpath.area(countries.features[0]))
+    console.log(gpath.area(data[0]))
 
-    d3.select('svg')
+    data = countries.features;
+    data.sort(function (x, y) {
+      return d3.descending(gpath.area(x), gpath.area(y))
+    })
+
+    var paths = svg
       .selectAll('path')
-      .data(countries.features)
+      .data(data)
       .enter()
       .append('path')
       .attr('d', gpath)
       .attr('stroke-width', 1)
       .attr('stroke', '#252525')
       .attr('fill', d => ccolor(gpath.area(d)))
+      // .attr('fill', 'steel-blue')
       .style("opacity", 0.25)
-      .on('mouseover', function (d) {
-        console.log(d.properties.BINOMIAL);
-        d3.select('#info').text(d.properties.BINOMIAL);
-      })
+      // .on('mouseover', function (d) {
+      //   console.log(d.properties.BINOMIAL);
+      //   d3.select('#info').text(d.properties.BINOMIAL);
+      // })
+      .on('click', d => {
+        if (d != null) {
+          console.log(d.properties.BINOMIAL);
+          d3.select('#info').text(d.properties.BINOMIAL);
+          // select.property("selected", d.properties.BINOMIAL)
 
-    // FOR MORE ON THIS, SEE ARTICLE THINKING WITH JOINS
-    // d3.select('svg')
-    //   .selectAll('circle')
-    //   .data(cities)
-    //   .enter()
-    //   .append('circle')
-    //   .attr('r', 3)
-    //   .attr('cx', d => proj([d.x, d.y])[0])
-    //   .attr('cy', d => proj([d.x, d.y])[1])
-    //   .attr('stroke-width', 1)
-    //   .attr('stroke', '#4F442B')
-    //   .attr('fill', '#FCBC34')
-    //   .on('mouseover', function(d) {
-    //     d3.select('#info').text(d.label);
-    //   })
+        }
+      })
 
     var mapZoom = d3.zoom()
       .on('zoom', zoomed);
 
     var zoomSettings = d3.zoomIdentity
       .translate(250, 250)
-      .scale(420);
+      .scale(1000);
 
-    d3.select('svg')
+    svg
       .call(mapZoom)
       .call(mapZoom.transform, zoomSettings);
 
@@ -105,6 +166,90 @@
         .attr('cx', d => proj([d.x, d.y])[0])
         .attr('cy', d => proj([d.x, d.y])[1]);
     }
-  }
 
+
+
+    // console.log(data)
+    // data.shift()
+    // console.log(data)
+
+    // var x = d3.scaleBand().range([50, width]);
+    // var y = d3.scaleLog().range([height, 0]);
+
+    // x.domain(data.map(function (d) { return d.properties.BINOMIAL; }));
+    // y.domain([0.0001, d3.max(data, function (d) { return gpath.area(d); })]);
+
+    // bar.append("g")
+    //   .attr("transform", "translate(0," + height + ")")
+    //   .call(d3.axisBottom(x))
+    //   .selectAll("text")
+    //   .style("text-anchor", "end")
+    //   .attr("dx", "-.8em")
+    //   .attr("dy", ".15em")
+    //   .style("font-size", "9px")
+    //   .attr("transform", function (d) {
+    //     return "rotate(-45)"
+    //   });
+
+
+    // bar.append("g")
+    //   .attr("transform", "translate(35)")
+    //   .call(d3.axisLeft(y))
+    //   .append("text")
+    //   .attr("fill", "#000")
+    //   .attr("transform", "rotate(-90)")
+    //   .attr("y", 6)
+    //   .attr("dy", "0.71em")
+    //   .attr("text-anchor", "end")
+    //   .text("Area (LOG)");
+
+    // bars = bar.selectAll("bar")
+    //   .data(data)
+    //   .enter().append("rect")
+    //   .style("fill", "steelblue")
+    //   .attr("x", function (d) { return x(d.properties.BINOMIAL); })
+    //   .attr("width", x.bandwidth() - 5)
+    //   .attr("y", function (d) { return y(gpath.area(d)); })
+    //   .attr("height", function (d) { return height - y(gpath.area(d)); });
+
+
+    function onchange() {
+      selectValue = d3.select('select').property('value')
+      paths.attr('fill', 'white')
+        .attr('fill', d => {
+          if (d.properties.BINOMIAL === selectValue) {
+            console.log(d.properties.BINOMIAL, selectValue)
+            return 'black';
+          }
+          else
+            return 'white'
+        })
+        .style("opacity", d => {
+          if (d.properties.BINOMIAL === selectValue) {
+            console.log(d.properties.BINOMIAL, selectValue)
+            return 1;
+          }
+          else return 0.25;
+        })
+        .sort(d => { // brings selected path to top layer
+          if (d.properties.BINOMIAL === selectValue) return 1;
+          else return -1;
+        })
+    }
+
+    //   bars.attr("opacity", 1)
+    //     .attr("opacity", d => {
+    //       console.log("HERE", d.properties.BINOMIAL, selectValue)
+    //       if (d.properties.BINOMIAL === selectValue) {
+    //         console.log("HERE1", d.properties.BINOMIAL, selectValue)
+    //         return 0.5;
+    //       }
+    //       else {
+    //         console.log("HERE2", d.properties.BINOMIAL, selectValue)
+    //         return 1;
+    //       }
+    //     })
+    // }
+
+  }
 </script>
